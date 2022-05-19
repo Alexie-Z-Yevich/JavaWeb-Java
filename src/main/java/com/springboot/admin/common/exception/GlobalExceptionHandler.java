@@ -1,4 +1,4 @@
-package com.springboot.admin.common.lang.exception;
+package com.springboot.admin.common.exception;
 
 import com.springboot.admin.common.lang.Result;
 import lombok.extern.slf4j.Slf4j;
