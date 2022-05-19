@@ -21,8 +21,8 @@ public class AuthController extends BaseController {
     @Autowired
     Producer producer;
 
-    @GetMapping("/capcha")
-    public Result capcha() throws IOException {
+    @GetMapping("/captcha")
+    public Result captcha() throws IOException {
         String key = UUID.randomUUID().toString();
         String code = producer.createText();
 
@@ -39,8 +39,8 @@ public class AuthController extends BaseController {
 
         return Result.succ(
                 MapUtil.builder()
-                        .put("key", key)
-                        .put("base64img", base64Img)
+                        .put("token", key)
+                        .put("captchaImg", base64Img)
                         .build()
         );
     }
