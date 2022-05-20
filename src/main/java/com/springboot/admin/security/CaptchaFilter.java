@@ -44,7 +44,7 @@ public class CaptchaFilter extends OncePerRequestFilter {
     }
 
     // 校验验证码逻辑
-    private void validate(HttpServletRequest httpServletRequest) throws CaptchaException {
+    private void validate(HttpServletRequest httpServletRequest) {
 
         String code = httpServletRequest.getParameter("code");
         String key = httpServletRequest.getParameter("token");
