@@ -2,4 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.springboot.admin.mapper.SysUserMapper">
 
+    <select id="getNavMenuIds" resultType="java.lang.Long">
+        select distinct rm.menu_id
+        from sys_user_role ur
+        left join sys_role_menu rm on ur.role_id = rm.role_id
+        where ur.user_id = #{userId}
+    </select>
+
 </mapper>

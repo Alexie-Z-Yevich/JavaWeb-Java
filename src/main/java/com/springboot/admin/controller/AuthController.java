@@ -39,7 +39,7 @@ public class AuthController extends BaseController {
 
         String base64Img = str + encoder.encode(outputStream.toByteArray());
 
-        redisUtil.hset(Const.CAPTCHA_KEY,key, code, 120);
+        redisUtil.hset(Const.CAPTCHA_KEY, key, code, 120);
 
         return Result.succ(
                 MapUtil.builder()

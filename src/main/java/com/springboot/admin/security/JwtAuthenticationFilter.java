@@ -1,6 +1,8 @@
 package com.springboot.admin.security;
 
 import cn.hutool.core.util.StrUtil;
+import com.springboot.admin.entity.SysUser;
+import com.springboot.admin.service.SysUserService;
 import com.springboot.admin.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -21,6 +23,11 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     @Autowired
     JwtUtils jwtUtils;
 
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    SysUserService sysUserService;
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
@@ -46,8 +53,10 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
         String username = claims.getSubject();
         // 获取用户的权限信息
+        SysUser sysUser = sysUserService.getByUsername(username);
+
         UsernamePasswordAuthenticationToken token
-                = new UsernamePasswordAuthenticationToken(username, null, null);
+                = new UsernamePasswordAuthenticationToken(username, null, userDetailsService.getUserAuthorities(sysUser.getId()));
 
         SecurityContextHolder.getContext().setAuthentication(token);
 
