@@ -8,5 +8,13 @@
         left join sys_role_menu rm on ur.role_id = rm.role_id
         where ur.user_id = #{userId}
     </select>
+    
+    <select id="listByMenuId" resultType="com.springboot.admin.entity.SysUser">
+        select distinct su.*
+        from sys_user_role ur
+        left join sys_role_menu rm on ur.role_id = rm.role_id
+        left join sys_user su on ur.user_id = su.id
+        where rm.menu_id = #{menuId}
+    </select>
 
 </mapper>

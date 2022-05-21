@@ -2,6 +2,12 @@ server:
   port: 8081
 # DataSource Config
 spring:
+#  mvc:
+#    hidden-method:
+#      filter:
+#        enabled: true
+  main:
+    allow-circular-references: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/vueadmin?serverTimezone=UTC

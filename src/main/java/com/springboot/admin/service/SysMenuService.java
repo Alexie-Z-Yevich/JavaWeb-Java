@@ -1,7 +1,10 @@
 package com.springboot.admin.service;
 
+import com.springboot.admin.common.dto.SysMenuDto;
 import com.springboot.admin.entity.SysMenu;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface SysMenuService extends IService<SysMenu> {
 
+    List<SysMenuDto> getCurrentUserNav();
+
+    List<SysMenu> tree();
 }
