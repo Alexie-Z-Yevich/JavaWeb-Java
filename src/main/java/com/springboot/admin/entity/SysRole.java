@@ -1,7 +1,11 @@
 package com.springboot.admin.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -25,6 +29,9 @@ public class SysRole extends BaseEntity {
      * 备注
      */
     private String remark;
+
+    @TableField(exist = false)
+    private List<Long> menuIds = new ArrayList<>();
 
 
 }
