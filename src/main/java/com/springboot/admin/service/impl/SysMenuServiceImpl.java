@@ -67,6 +67,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             dto.setId(m.getId());
             dto.setName(m.getPerms());
             dto.setTitle(m.getName());
+            dto.setIcon(m.getIcon());
             dto.setComponent(m.getComponent());
             dto.setPath(m.getPath());
 
@@ -101,7 +102,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             }
         }
 
-        System.out.println(JSONUtil.toJsonStr(finalMenus));
         return finalMenus;
     }
 }

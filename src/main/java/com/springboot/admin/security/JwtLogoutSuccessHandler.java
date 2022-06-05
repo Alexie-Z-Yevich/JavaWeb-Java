@@ -33,7 +33,7 @@ public class JwtLogoutSuccessHandler implements LogoutSuccessHandler {
 
         response.setHeader(jwtUtils.getHeader(), "");
 
-        Result result = Result.succ("??????");
+        Result result = Result.succ("");
 
         outputStream.write(JSONUtil.toJsonStr(result).getBytes("UTF-8"));
 

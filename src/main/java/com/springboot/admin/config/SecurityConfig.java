@@ -60,12 +60,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
-
                 // 登录配置
                 .formLogin()
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailureHandler)
-
                 .and()
                 .logout()
                 .logoutSuccessHandler(jwtLogoutSuccessHandler)
@@ -73,7 +71,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
                 // 配置拦截规则
                 .and()
                 .authorizeRequests()
@@ -84,12 +81,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
-
                 //配置自定义的过滤器
                 .and()
                 .addFilter(jwtAuthenticationFilter())
                 .addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class);
-        ;
     }
 
     @Override

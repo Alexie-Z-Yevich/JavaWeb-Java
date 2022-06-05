@@ -30,6 +30,9 @@ public class BaseController {
     @Autowired
     SysRoleMenuService sysRoleMenuService;
 
+    @Autowired
+    SysStudentService sysStudentService;
+
     // 获取页码
     public Page getPage() {
         int current = ServletRequestUtils.getIntParameter(req, "current", 1);
