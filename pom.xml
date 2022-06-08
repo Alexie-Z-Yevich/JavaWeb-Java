@@ -11,10 +11,14 @@
     <groupId>com.springboot</groupId>
     <artifactId>Admin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>Admin</name>
     <description>Admin</description>
     <properties>
-        <java.version>18</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <spring.version>4.0.0.RELEASE</spring.version>
     </properties>
     <dependencies>
         <dependency>

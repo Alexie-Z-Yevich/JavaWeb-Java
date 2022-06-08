@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.admin.mapper.SysStudentMapper">
+
+    <select id="getById" resultType="com.springboot.admin.entity.SysStudent">
+        select id, s_id, s_name, birth, statu, ss.class_id, class_name, sex, native_place
+        from sys_student ss,
+             sys_class sc
+        where ss.class_id = sc.class_id
+          and id = #{id}
+    </select>
+
+    <select id="getAll" resultType="com.springboot.admin.entity.SysStudent">
+        select id, s_id, s_name, birth, statu, ss.class_id, class_name, sex, native_place
+        from sys_student ss,
+             sys_class sc
+        where ss.class_id = sc.class_id
+        order by s_id
+    </select>
+
+    <select id="getByName" resultType="com.springboot.admin.entity.SysStudent">
+        select id, s_id, s_name, birth, statu, ss.class_id, class_name, sex, native_place
+        from sys_student ss,
+             sys_class sc
+        where ss.class_id = sc.class_id
+          and s_name = #{s_name}
+        order by s_id
+    </select>
+
+    <select id="getClassNum" resultType="Integer">
+        select count(*)
+        from sys_student
+        where class_id = #{class_id}
+    </select>
+
+    <select id="getSIdByIds" resultType="Long">
+        select s_id
+        from sys_student
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getExcelBySId" resultType="com.springboot.admin.entity.ExcelEntity">
+        SELECT s_id,s_name,sex,birth,native_place,statu,class_name,math,java,English,ET,COUNT
+        FROM ( SELECT *,sum( math + java + English + ET ) AS 'COUNT'
+               FROM ( SELECT s_id,
+                             sum(IF ( c_name = '数学', grade, 0 )) AS 'math',
+                              sum(IF ( c_name = 'Java', grade, 0 )) AS 'java',
+                              sum(IF ( c_name = '英语', grade, 0 )) AS 'English',
+                              sum(IF ( c_name = '体育', grade, 0 )) AS 'ET'
+                      FROM ( SELECT ss.s_id, s_name, c_name, grade, ss.class_id
+                             FROM sys_student ss
+                                      LEFT JOIN sys_student_course ssc ON ss.s_id = ssc.s_id
+                                      LEFT JOIN sys_course sc ON ssc.c_id = sc.c_id
+                                      LEFT JOIN sys_class ON ss.class_id = sys_class.class_id
+                           ) AS temp
+                      WHERE class_id = ( SELECT class_id FROM sys_student WHERE s_id = #{s_id} )
+                      GROUP BY s_name
+                    ) AS temp1
+                        LEFT JOIN sys_student USING ( s_id )
+               GROUP BY s_id
+             ) AS temp2
+                 LEFT JOIN sys_class USING ( class_id )
+        ORDER BY COUNT DESC
+    </select>
+
+    <select id="getAllExcel" resultType="com.springboot.admin.entity.ExcelEntity">
+        SELECT s_id,s_name,sex,birth,native_place,statu,class_name,math,java,English,ET,COUNT
+        FROM ( SELECT *,sum( math + java + English + ET ) AS 'COUNT'
+               FROM ( SELECT s_id,
+                             sum(IF ( c_name = '数学', grade, 0 )) AS 'math',
+                              sum(IF ( c_name = 'Java', grade, 0 )) AS 'java',
+                              sum(IF ( c_name = '英语', grade, 0 )) AS 'English',
+                              sum(IF ( c_name = '体育', grade, 0 )) AS 'ET'
+                      FROM ( SELECT ss.s_id, s_name, c_name, grade, ss.class_id
+                             FROM sys_student ss
+                                      LEFT JOIN sys_student_course ssc ON ss.s_id = ssc.s_id
+                                      LEFT JOIN sys_course sc ON ssc.c_id = sc.c_id
+                                      LEFT JOIN sys_class ON ss.class_id = sys_class.class_id
+                           ) AS temp
+                      GROUP BY s_name
+                    ) AS temp1
+                        LEFT JOIN sys_student USING ( s_id )
+               GROUP BY s_id
+             ) AS temp2
+                 LEFT JOIN sys_class USING ( class_id )
+        ORDER BY COUNT DESC
+    </select>
+</mapper>
