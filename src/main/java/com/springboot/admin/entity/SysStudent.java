@@ -62,6 +62,12 @@ public class SysStudent{
     @TableField(exist = false)
     private int label;
 
-    private String statu;
+    private Integer deptId;
+
+    @TableField(exist = false)
+    private String deptName;
+
+    @TableField(exist = false)
+    private Integer statu;
 
 }

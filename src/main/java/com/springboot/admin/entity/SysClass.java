@@ -1,5 +1,6 @@
 package com.springboot.admin.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 /**
@@ -26,9 +27,15 @@ public class SysClass{
     private String className;
 
     /***
-     * 系别号
+     * 班长学号
      */
+    private Integer classMonitor;
+
+    @TableField(exist = false)
     private Integer deptId;
+
+    @TableField(exist = false)
+    private String deptName;
 
 
 }

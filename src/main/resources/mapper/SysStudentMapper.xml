@@ -3,28 +3,39 @@
 <mapper namespace="com.springboot.admin.mapper.SysStudentMapper">
 
     <select id="getById" resultType="com.springboot.admin.entity.SysStudent">
-        select id, s_id, s_name, birth, statu, ss.class_id, class_name, sex, native_place
-        from sys_student ss,
-             sys_class sc
-        where ss.class_id = sc.class_id
-          and id = #{id}
+        SELECT
+            *,
+            ( class_monitor - s_id ) AS statu
+        FROM
+            sys_student
+                LEFT JOIN sys_class USING ( class_id )
+                LEFT JOIN department USING (
+                                            dept_id)
+        WHERE id = #{id}
     </select>
 
     <select id="getAll" resultType="com.springboot.admin.entity.SysStudent">
-        select id, s_id, s_name, birth, statu, ss.class_id, class_name, sex, native_place
-        from sys_student ss,
-             sys_class sc
-        where ss.class_id = sc.class_id
-        order by s_id
+        SELECT
+            *,
+            ( class_monitor - s_id ) AS statu
+        FROM
+            sys_student
+                LEFT JOIN sys_class USING ( class_id )
+                LEFT JOIN department USING (
+                                            dept_id)
+        ORDER BY s_id
     </select>
 
     <select id="getByName" resultType="com.springboot.admin.entity.SysStudent">
-        select id, s_id, s_name, birth, statu, ss.class_id, class_name, sex, native_place
-        from sys_student ss,
-             sys_class sc
-        where ss.class_id = sc.class_id
-          and s_name = #{s_name}
-        order by s_id
+        SELECT
+            *,
+            ( class_monitor - s_id ) AS statu
+        FROM
+            sys_student
+                LEFT JOIN sys_class USING ( class_id )
+                LEFT JOIN department USING ( dept_id )
+        WHERE
+            s_name = #{s_name}
     </select>
 
     <select id="getClassNum" resultType="Integer">
@@ -43,7 +54,7 @@
     </select>
 
     <select id="getExcelBySId" resultType="com.springboot.admin.entity.ExcelEntity">
-        SELECT s_id,s_name,sex,birth,native_place,statu,class_name,math,java,English,ET,COUNT
+        SELECT s_id,s_name,sex,birth,native_place, class_name,math,java,English,ET,COUNT
         FROM ( SELECT *,sum( math + java + English + ET ) AS 'COUNT'
                FROM ( SELECT s_id,
                              sum(IF ( c_name = '数学', grade, 0 )) AS 'math',
@@ -67,7 +78,7 @@
     </select>
 
     <select id="getAllExcel" resultType="com.springboot.admin.entity.ExcelEntity">
-        SELECT s_id,s_name,sex,birth,native_place,statu,class_name,math,java,English,ET,COUNT
+        SELECT s_id,s_name,sex,birth,native_place, class_name,math,java,English,ET,COUNT
         FROM ( SELECT *,sum( math + java + English + ET ) AS 'COUNT'
                FROM ( SELECT s_id,
                              sum(IF ( c_name = '数学', grade, 0 )) AS 'math',
@@ -87,5 +98,11 @@
              ) AS temp2
                  LEFT JOIN sys_class USING ( class_id )
         ORDER BY COUNT DESC
+    </select>
+
+    <select id="getBySId" resultType="String">
+        SELECT s_name
+        FROM sys_student
+        WHERE s_id = #{s_id}
     </select>
 </mapper>

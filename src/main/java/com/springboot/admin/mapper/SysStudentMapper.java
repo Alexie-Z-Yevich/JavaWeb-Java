@@ -31,4 +31,6 @@ public interface SysStudentMapper extends BaseMapper<SysStudent> {
     List<ExcelEntity> getExcelBySId(Integer s_id);
 
     List<ExcelEntity> getAllExcel();
+
+    String getBySId(Integer s_id);
 }

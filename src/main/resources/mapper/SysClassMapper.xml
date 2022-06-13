@@ -10,4 +10,18 @@
         select class_id from sys_class where class_name = #{class_name}
     </select>
 
+    <select id="getDeptClass" resultType="com.springboot.admin.entity.SysClass">
+        SELECT
+            *
+        FROM
+            department
+                LEFT JOIN sys_class_dept USING ( dept_id )
+                LEFT JOIN sys_class USING (
+                                           class_id)
+    </select>
+
+    <update id="updateMonitor">
+        update sys_class set class_monitor = #{s_id} where class_id = #{classId}
+    </update>
+
 </mapper>

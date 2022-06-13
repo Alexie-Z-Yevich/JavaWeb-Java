@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.springboot.admin.common.lang.Const;
 import com.springboot.admin.common.lang.Result;
 import com.springboot.admin.entity.*;
+import com.springboot.admin.mapper.SysClassDeptMapper;
 import com.springboot.admin.mapper.SysClassMapper;
 import com.springboot.admin.mapper.SysStudentMapper;
 import com.springboot.admin.service.SysStudentCourseService;
@@ -45,6 +46,10 @@ public class SysStudentController extends BaseController {
     @Autowired
     SysClassMapper sysClassMapper;
 
+    @Autowired
+    SysClassDeptMapper sysClassDeptMapper;
+
+
 
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAuthority('stu:message:list')")
@@ -54,14 +59,9 @@ public class SysStudentController extends BaseController {
         Assert.notNull(sysStudent, "找不到该学生");
 
         SysStudent result = sysStudentMapper.getById(id);
-        if (result.getStatu() == "在读"){
-            result.setLabel(0);
-        }else if(result.getStatu() == "休学"){
-            result.setLabel(1);
-        }else if(result.getStatu() == "退学"){
-            result.setLabel(2);
-        };
-
+        if(result.getStatu() != 0){
+            result.setStatu(1);
+        }
         return Result.succ(result);
     }
 
@@ -78,6 +78,11 @@ public class SysStudentController extends BaseController {
         }else {
             result = sysStudentMapper.getAll();
         }
+        for (SysStudent u:result) {
+            if(u.getStatu() != 0){
+                u.setStatu(1);
+            }
+        }
         pageData.setRecords(result);
         return Result.succ(pageData);
     }
@@ -88,32 +93,33 @@ public class SysStudentController extends BaseController {
         return Result.succ(result);
     }
 
-
     @PostMapping("/save")
     @PreAuthorize("hasAuthority('stu:student:save')")
     public Result save(@Validated @RequestBody SysStudent sysStudent) {
-        // 设置状态
-        if(sysStudent.getLabel() == 0){
-            sysStudent.setStatu("在读");
-        }else if(sysStudent.getLabel() == 1){
-            sysStudent.setStatu("休学");
-        }else if(sysStudent.getLabel() == 2){
-            sysStudent.setStatu("退学");
-        }
         // 设置班级
         String class_name = sysStudent.getClassName();
         Integer classId = sysClassMapper.getByClassName(class_name);
         sysStudent.setClassId(classId);
+
+        // 通过班级设置学院
+        Integer deptId = sysClassDeptMapper.getDept(classId);
+        sysStudent.setDeptId(deptId);
+
 
         // 查找班级人数
         Integer classNum = sysStudentMapper.getClassNum(classId);
 
         // 设置学号
         String str;
-        if(classId< 10){
-            str = "2005060" + classId;
+        if(deptId < 10){
+            str = "20050" + deptId;
         }else{
-            str = "200506" + classId;
+            str = "2005" + deptId;
+        }
+        if(classId< 10){
+            str = str + "0"  + classId;
+        }else{
+            str = str + classId;
         }
         if(classNum < 10){
             str = str + "0" + (classNum + 1);
@@ -135,24 +141,32 @@ public class SysStudentController extends BaseController {
         sysStudentCourseService.save(sysStudentCourse);
 
         sysStudentService.save(sysStudent);
+
+        // 对班长职位进行判断
+        if(sysStudent.getStatu() == 0){
+            sysClassMapper.updateMonitor(a, classId);
+        }
+
         return Result.succ(sysStudent);
     }
 
     @PostMapping("/update")
     @PreAuthorize("hasAuthority('stu:student:update')")
     public Result update(@Validated @RequestBody SysStudent sysStudent) {
-        // 设置状态
-        if(sysStudent.getLabel() == 0){
-            sysStudent.setStatu("在读");
-        }else if(sysStudent.getLabel() == 1){
-            sysStudent.setStatu("休学");
-        }else if(sysStudent.getLabel() == 2){
-            sysStudent.setStatu("退学");
-        }
         // 设置班级
         String class_name = sysStudent.getClassName();
         Integer classId = sysClassMapper.getByClassName(class_name);
         sysStudent.setClassId(classId);
+
+        // 通过班级设置学院
+        Integer deptId = sysClassDeptMapper.getDept(classId);
+        sysStudent.setDeptId(deptId);
+
+        // 对班长职位进行判断
+        if(sysStudent.getStatu() == 0){
+            sysClassMapper.updateMonitor(sysStudent.getSId(), classId);
+        }
+
         sysStudentService.updateById(sysStudent);
         return Result.succ(sysStudent);
     }

@@ -21,4 +21,7 @@ public interface SysClassMapper extends BaseMapper<SysClass> {
 
     Integer getByClassName(String class_name);
 
+    List<SysClass> getDeptClass();
+
+    void updateMonitor(int s_id, Integer classId);
 }
