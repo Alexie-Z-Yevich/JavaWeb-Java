@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.admin.mapper.ApplyMessageMapper">
+
+    <select id="getBySId" resultType="com.springboot.admin.entity.ApplyMessage">
+        SELECT
+            *
+        FROM
+            apply_message
+                LEFT JOIN sys_student USING ( s_id )
+        WHERE
+            s_id = #{sId}
+    </select>
+
+    <select id="getAll" resultType="com.springboot.admin.entity.ApplyMessage">
+        SELECT
+            *
+        FROM
+            apply_message
+                LEFT JOIN sys_student USING ( s_id )
+    </select>
+
+    <update id="update">
+        UPDATE
+            apply_message
+        SET
+            statu_id = #{statusId}
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="getByStatu" resultType="Integer">
+        select statu_id from apply_code where statu = #{statu}
+    </select>
+
+    <select id="getByStatuId" resultType="com.springboot.admin.entity.ApplyMessage">
+        SELECT
+            *
+        FROM
+            apply_message
+                LEFT JOIN sys_student USING ( s_id )
+        WHERE
+            statu_id = #{statuId}
+    </select>
+
+</mapper>
