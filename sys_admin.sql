@@ -11,11 +11,49 @@
  Target Server Version : 80027
  File Encoding         : 65001
 
- Date: 13/06/2022 19:02:38
+ Date: 14/06/2022 21:13:14
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for apply_code
+-- ----------------------------
+DROP TABLE IF EXISTS `apply_code`;
+CREATE TABLE `apply_code`  (
+  `statu_id` int NOT NULL,
+  `statu` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '状态',
+  PRIMARY KEY (`statu_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of apply_code
+-- ----------------------------
+INSERT INTO `apply_code` VALUES (0, '未审核');
+INSERT INTO `apply_code` VALUES (1, '通过');
+INSERT INTO `apply_code` VALUES (2, '驳回');
+
+-- ----------------------------
+-- Table structure for apply_message
+-- ----------------------------
+DROP TABLE IF EXISTS `apply_message`;
+CREATE TABLE `apply_message`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `s_id` int NOT NULL COMMENT '学号',
+  `statu_id` int NOT NULL COMMENT '状态id',
+  `emp` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '请假类型',
+  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '理由',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of apply_message
+-- ----------------------------
+INSERT INTO `apply_message` VALUES (2, 2005060101, 1, '病假', '测试内容2');
+INSERT INTO `apply_message` VALUES (3, 2005060106, 1, '事假', '测试内容');
+INSERT INTO `apply_message` VALUES (5, 2005060106, 0, '事假', NULL);
+INSERT INTO `apply_message` VALUES (6, 2005060106, 0, '病假', '生成');
 
 -- ----------------------------
 -- Table structure for change_code
@@ -47,7 +85,7 @@ CREATE TABLE `change_message`  (
   `rec_time` datetime NOT NULL COMMENT '记录时间',
   `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of change_message
@@ -105,7 +143,7 @@ CREATE TABLE `punish_message`  (
   `rec_time` datetime NOT NULL,
   `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of punish_message
@@ -145,7 +183,7 @@ CREATE TABLE `reward_message`  (
   `rec_time` datetime NOT NULL,
   `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of reward_message
@@ -225,7 +263,7 @@ CREATE TABLE `sys_menu`  (
   `statu` int NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `name`(`name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -259,6 +297,10 @@ INSERT INTO `sys_menu` VALUES (27, 0, '学籍管理', NULL, 'sta:manage', NULL, 
 INSERT INTO `sys_menu` VALUES (28, 27, '学籍变更', '/sta/changes', 'sta:change:list', 'sta/Change', 1, 'Switch', 1, '2022-06-09 18:44:20', NULL, 1);
 INSERT INTO `sys_menu` VALUES (29, 27, '学生奖励', '/sta/rewards', 'sta:reward:list', 'sta/Reward', 1, 'Medal', 2, '2022-06-09 18:45:39', NULL, 1);
 INSERT INTO `sys_menu` VALUES (30, 27, '学生处罚', '/sta/punishs', 'sta:punish:list', 'sta/Punish', 1, 'WarningFilled', 3, '2022-06-09 18:46:38', NULL, 1);
+INSERT INTO `sys_menu` VALUES (31, 0, '学生申请', '', 'stu:apply', NULL, 0, 'Switch', 5, '2022-06-13 20:31:12', NULL, 1);
+INSERT INTO `sys_menu` VALUES (33, 31, '学生请假', '/lea/students', 'lea:student:list', 'lea/Student', 1, 'Medal', 1, '2022-06-13 20:35:10', NULL, 1);
+INSERT INTO `sys_menu` VALUES (34, 0, '教师审核', '', 'tea:apply', NULL, 0, 'Management', 6, '2022-06-13 20:36:39', NULL, 1);
+INSERT INTO `sys_menu` VALUES (35, 34, '假条批阅', '/lea/teachers', 'lea:teacher:list', 'lea/Teacher', 1, 'WarningFilled', 1, '2022-06-13 20:37:48', NULL, 1);
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -275,13 +317,15 @@ CREATE TABLE `sys_role`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `name`(`name`) USING BTREE,
   UNIQUE INDEX `code`(`code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
 INSERT INTO `sys_role` VALUES (3, '普通用户', 'normal', '只有基本查看功能', '2021-01-04 10:09:14', '2021-01-30 08:19:52', 1);
 INSERT INTO `sys_role` VALUES (6, '超级管理员', 'admin', '系统默认最高权限，不可以编辑和任意修改', '2021-01-16 13:29:03', '2021-01-17 15:50:45', 1);
+INSERT INTO `sys_role` VALUES (7, '老师权限', 'teacher', '老师专用角色权限', '2022-06-13 19:41:11', '2022-06-13 19:41:15', 1);
+INSERT INTO `sys_role` VALUES (8, '学生权限', 'student', '学生专用角色权限', '2022-06-13 19:41:53', '2022-06-13 19:41:57', 1);
 
 -- ----------------------------
 -- Table structure for sys_role_menu
@@ -292,7 +336,7 @@ CREATE TABLE `sys_role_menu`  (
   `role_id` bigint NOT NULL,
   `menu_id` bigint NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 112 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 147 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role_menu
@@ -330,6 +374,30 @@ INSERT INTO `sys_role_menu` VALUES (109, 6, 27);
 INSERT INTO `sys_role_menu` VALUES (110, 6, 28);
 INSERT INTO `sys_role_menu` VALUES (111, 6, 29);
 INSERT INTO `sys_role_menu` VALUES (112, 6, 30);
+INSERT INTO `sys_role_menu` VALUES (113, 7, 20);
+INSERT INTO `sys_role_menu` VALUES (114, 7, 21);
+INSERT INTO `sys_role_menu` VALUES (115, 7, 24);
+INSERT INTO `sys_role_menu` VALUES (116, 7, 25);
+INSERT INTO `sys_role_menu` VALUES (117, 7, 26);
+INSERT INTO `sys_role_menu` VALUES (118, 7, 22);
+INSERT INTO `sys_role_menu` VALUES (119, 7, 23);
+INSERT INTO `sys_role_menu` VALUES (120, 7, 27);
+INSERT INTO `sys_role_menu` VALUES (121, 7, 28);
+INSERT INTO `sys_role_menu` VALUES (122, 7, 29);
+INSERT INTO `sys_role_menu` VALUES (123, 7, 30);
+INSERT INTO `sys_role_menu` VALUES (134, 6, 31);
+INSERT INTO `sys_role_menu` VALUES (135, 6, 33);
+INSERT INTO `sys_role_menu` VALUES (136, 6, 34);
+INSERT INTO `sys_role_menu` VALUES (137, 6, 35);
+INSERT INTO `sys_role_menu` VALUES (138, 8, 20);
+INSERT INTO `sys_role_menu` VALUES (139, 8, 21);
+INSERT INTO `sys_role_menu` VALUES (140, 8, 24);
+INSERT INTO `sys_role_menu` VALUES (141, 8, 25);
+INSERT INTO `sys_role_menu` VALUES (142, 8, 26);
+INSERT INTO `sys_role_menu` VALUES (143, 8, 22);
+INSERT INTO `sys_role_menu` VALUES (144, 8, 23);
+INSERT INTO `sys_role_menu` VALUES (145, 8, 31);
+INSERT INTO `sys_role_menu` VALUES (146, 8, 33);
 
 -- ----------------------------
 -- Table structure for sys_student
@@ -346,7 +414,7 @@ CREATE TABLE `sys_student`  (
   `dept_id` int NOT NULL COMMENT '院系号',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `s_id`(`s_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2005060319 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2005060320 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_student
@@ -419,13 +487,15 @@ CREATE TABLE `sys_user`  (
   `statu` int NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `UK_USERNAME`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
 INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$R7zegeWzOXPw871CmNuJ6upC0v8D373GuLuTw8jn6NET4BkPRZfgK', 'https://raw.githubusercontent.com/Alexie-Z-Yevich/Project/master/vue2/src/assets/CatAdmin.jpg', '123@qq.com', '广州', '2021-01-12 22:13:53', '2021-01-16 16:57:32', '2020-12-30 08:38:37', 1);
 INSERT INTO `sys_user` VALUES (2, 'test', '$2a$10$R7zegeWzOXPw871CmNuJ6upC0v8D373GuLuTw8jn6NET4BkPRZfgK', 'https://raw.githubusercontent.com/Alexie-Z-Yevich/Project/master/vue2/src/assets/CatAdmin.jpg', 'test@qq.com', NULL, '2021-01-30 08:20:22', '2021-01-30 08:55:57', NULL, 1);
+INSERT INTO `sys_user` VALUES (4, '老师', '$2a$10$R7zegeWzOXPw871CmNuJ6upC0v8D373GuLuTw8jn6NET4BkPRZfgK', 'https://raw.githubusercontent.com/Alexie-Z-Yevich/Project/master/vue2/src/assets/CatAdmin.jpg', '2478940564@qq.com', NULL, '2022-06-13 19:38:35', '2022-06-13 19:39:36', NULL, 1);
+INSERT INTO `sys_user` VALUES (5, '2005060106', '$2a$10$R7zegeWzOXPw871CmNuJ6upC0v8D373GuLuTw8jn6NET4BkPRZfgK', 'https://raw.githubusercontent.com/Alexie-Z-Yevich/Project/master/vue2/src/assets/CatAdmin.jpg', '1213791406@qq.com', NULL, '2022-06-13 19:40:01', '2022-06-13 19:40:12', NULL, 1);
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -436,7 +506,7 @@ CREATE TABLE `sys_user_role`  (
   `user_id` bigint NOT NULL,
   `role_id` bigint NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user_role
@@ -444,11 +514,7 @@ CREATE TABLE `sys_user_role`  (
 INSERT INTO `sys_user_role` VALUES (4, 1, 6);
 INSERT INTO `sys_user_role` VALUES (7, 1, 3);
 INSERT INTO `sys_user_role` VALUES (13, 2, 3);
-
--- ----------------------------
--- View structure for check1
--- ----------------------------
-DROP VIEW IF EXISTS `check1`;
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `check1` AS select `temp1`.`s_id` AS `s_id`,`temp1`.`math` AS `math`,`temp1`.`java` AS `java`,`temp1`.`English` AS `English`,`temp1`.`ET` AS `ET`,`sys_student`.`id` AS `id`,`sys_student`.`s_name` AS `s_name`,`sys_student`.`sex` AS `sex`,`sys_student`.`birth` AS `birth`,`sys_student`.`native_place` AS `native_place`,`sys_student`.`statu` AS `statu`,`sys_student`.`class_id` AS `class_id` from ((select `temp`.`s_id` AS `s_id`,sum(if((`temp`.`c_name` = '数学'),`temp`.`grade`,0)) AS `math`,sum(if((`temp`.`c_name` = 'Java'),`temp`.`grade`,0)) AS `java`,sum(if((`temp`.`c_name` = '英语'),`temp`.`grade`,0)) AS `English`,sum(if((`temp`.`c_name` = '体育'),`temp`.`grade`,0)) AS `ET` from (select `ss`.`s_id` AS `s_id`,`ss`.`s_name` AS `s_name`,`sc`.`c_name` AS `c_name`,`ssc`.`grade` AS `grade`,`ss`.`class_id` AS `class_id` from (((`sys_student` `ss` left join `sys_student_course` `ssc` on((`ss`.`s_id` = `ssc`.`s_id`))) left join `sys_course` `sc` on((`ssc`.`c_id` = `sc`.`c_id`))) left join `sys_class` on((`ss`.`class_id` = `sys_class`.`class_id`)))) `temp` where (`temp`.`class_id` = (select `sys_student`.`class_id` from `sys_student` where (`sys_student`.`s_id` = 2005060101))) group by `temp`.`s_name`) `temp1` left join `sys_student` on((`temp1`.`s_id` = `sys_student`.`s_id`)));
+INSERT INTO `sys_user_role` VALUES (15, 4, 7);
+INSERT INTO `sys_user_role` VALUES (16, 5, 8);
 
 SET FOREIGN_KEY_CHECKS = 1;
