@@ -155,6 +155,6 @@ Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obta
 
 希望大家还是用心开发，学会了SSM/Spring Boot，未来在计算机行业打螺丝就不是啥问题了，如果想要去体验一下项目，可以参考www.fenrisx.top网站，已经部署了，但是未来可能也会过期吧，毕竟咱也是比较穷的，主要实现的功能：
 
-![img](https://raw.githubusercontent.com/Alexie-Z-Yevich/MyLearningNotes/master/img/总览.jpg)
+![img](https://raw.githubusercontent.com/Alexie-Z-Yevich/MyLearningNotes/master/img/总览.png)
 
 也没啥好说的，能看到这的各位一定要加油啊！我要去接着卷了~ ——By Alexie-Z-Yevich 2022.6.17
