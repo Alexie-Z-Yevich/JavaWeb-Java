@@ -74,7 +74,7 @@ B站视频：https://www.bilibili.com/video/BV1af4y1s7Wh?spm_id_from=333.999.0.0
 
 3、mock.js的使用：在还没有开发后端的情况下，对前端进行数据渲染时通常需要获取后端的数据，目前网上的教程都是教大家使用开源的mock.js去Mock数据，但是近几年有不少国内外的接口软件崭露头角，比如说postman、Apifox等。这里我使用的是Apifox向前后端发送Mock数据。
 
-![img](https://raw.githubusercontent.com/Alexie-Z-Yevich/MyLearningNotes/master/img/mock.jpg)
+![img](img/mock.jpg)
 
 经过Mock回显的数据能够很好的了解自己传输的data格式，方便在前后端交互中对传输数据的格式进行定义修改。
 
@@ -92,11 +92,11 @@ Webpack会先打包，然后启动开发服务器，请求服务器时直接给�
 
 5、axios提供下载功能：
 
-![img](https://raw.githubusercontent.com/Alexie-Z-Yevich/MyLearningNotes/master/img/axios.jpg) 
+![img](img/axios.jpg)
 
 这里需要注意的是，我的axios配置了拦截器，但是文件流的传输需要设置请求头和编码格式，那么后端通过response传过来的数据就不能再放入Result格式化了（如果直接放入了就会像前端发送两次数据，虽然可以正常下载，但是前端会抛出异常），那么前端的axios过滤器就必须将文件流的response放行，如何有选择的放行就成了一个问腿：如果直接注释掉的话，那么最直接的报错就是即使前端拿到了诸如code: 400也会执行操作，这时登陆页面就会失效，虽然不会登陆成功，但是会进入系统页面。所以通过我的逐一对比，发现response.data.type是唯一的，这恰好是文件的传输格式——"application/octet-stream"。所以在axios全局过滤时将数据流为application/octet-stream的response放开，就能保证数据的正常下载。
 
-![img](https://raw.githubusercontent.com/Alexie-Z-Yevich/MyLearningNotes/master/img/axios2.jpg)
+![img](img/axios2.jpg)
 
 ------
 
@@ -104,7 +104,7 @@ Webpack会先打包，然后启动开发服务器，请求服务器时直接给�
 
 1、跨域问题：和前端进行交互时会出现跨域问题，这里配置了一个CorsConfig文件传输Authorization，并配置许可实现前后端的正常交互。
 
-![img](https://raw.githubusercontent.com/Alexie-Z-Yevich/MyLearningNotes/master/img/跨域.jpg)
+![img](img/跨域.jpg)
 
  
 
@@ -120,7 +120,7 @@ Webpack会先打包，然后启动开发服务器，请求服务器时直接给�
 
 Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obtain JDBC Connection; nested exception is java.sql.SQLException: Access denied for user 'root'@'localhost' (using password: YES)] with root cause.
 
-![img](https://raw.githubusercontent.com/Alexie-Z-Yevich/MyLearningNotes/master/img/yml配置.jpg) 
+![img](img/yml配置.jpg)
 
  
 
@@ -130,10 +130,11 @@ Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obta
 
 配置像前端传输的流格式，配置Header信息让前端接收。
 
-![img](https://raw.githubusercontent.com/Alexie-Z-Yevich/MyLearningNotes/master/img/poi1.jpg)
+![img](img/poi1.jpg)
 
-![img](https://raw.githubusercontent.com/Alexie-Z-Yevich/MyLearningNotes/master/img/poi2.jpg) 
-![img](https://raw.githubusercontent.com/Alexie-Z-Yevich/MyLearningNotes/master/img/poi3.jpg)
+![](img/poi2.jpg)
+
+![img](/img/poi3.jpg)
 
 这里需要注意的是，在前后端交互时会存在跨域问题，虽然我们在前面已经配置了CorsConfig文件解决了基本的跨域问题以及配置了Authorization来传输token，但是这里需要对上图中的Content-disposition开放额外的放行。需要在CorsConfig文件中加入corsConfiguration.addExposedHeader("Content-disposition");保证前端不会发生跨域问题。
 
@@ -145,7 +146,7 @@ Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obta
 
 这里我遇到的问题是：我的学生信息作为单独的一张表，新增学生时只在sys_student表中执行插入功能，为了避免冲突，我的成绩表中就是查询的已有的学生信息，对于缺少的字段进行成绩为零操作。所以在成绩录入的页面我的sql语句是更新操作，那么对于新插入的学生，他的成绩字段为空，因此成绩录入就不成功。解决方法也很简单，在新建学生信息的时候将学生的成绩字段也插入即可。
 
-![img](https://raw.githubusercontent.com/Alexie-Z-Yevich/MyLearningNotes/master/img/数据库插入.jpg)
+![img](img/数据库插入.jpg)
 
 ------
 
@@ -155,6 +156,6 @@ Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Failed to obta
 
 希望大家还是用心开发，学会了SSM/Spring Boot，未来在计算机行业打螺丝就不是啥问题了，如果想要去体验一下项目，可以参考www.fenrisx.top网站，已经部署了，但是未来可能也会过期吧，毕竟咱也是比较穷的，主要实现的功能：
 
-![img](https://raw.githubusercontent.com/Alexie-Z-Yevich/MyLearningNotes/master/img/总览.png)
+![img](img/总览.png)
 
 也没啥好说的，能看到这的各位一定要加油啊！我要去接着卷了~ ——By Alexie-Z-Yevich 2022.6.17
